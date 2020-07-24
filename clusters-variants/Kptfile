@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+    name: clusters-variants
+upstream:
+    type: git
+    git:
+        commit: f3d5e716b2956fed74c3a8ce5d7fe605fc7d0692
+        repo: git@github.com:phanimarupaka/clusters-variants
+        directory: /
+        ref: v0.1.0

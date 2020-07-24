@@ -1,0 +1,122 @@
+apiVersion: container.cnrm.cloud.google.com/v1beta1
+kind: ContainerCluster
+metadata:
+  name: ENV-REGION # {"$kpt-set":"env-region"}
+  namespace: YOUR_NAMESPACE # {"$kpt-set":"namespace"}
+  annotations:
+    cnrm.cloud.google.com/remove-default-node-pool: "true" # don't create the default node pool
+spec:
+  initialNodeCount: 1 # this field must be set to greater than 0
+  addonsConfig:
+    horizontalPodAutoscaling:
+      disabled: false
+    httpLoadBalancing:
+      disabled: false
+    istioConfig:
+      disabled: true
+    networkPolicyConfig:
+      disabled: false
+  clusterAutoscaling:
+    enabled: false
+  databaseEncryption:
+    state: DECRYPTED
+  defaultMaxPodsPerNode: 110
+  enableBinaryAuthorization: true
+  ipAllocationPolicy:
+    clusterSecondaryRangeName: anthos-platform-pods-ENV # {"$kpt-set":"clusterSecondaryRangeName"}
+    servicesSecondaryRangeName: anthos-platform-services-ENV # {"$kpt-set":"servicesSecondaryRangeName"}
+  location: REGION # {"$kpt-set":"region"}
+  loggingService: logging.googleapis.com/kubernetes
+  maintenancePolicy:
+    dailyMaintenanceWindow:
+      duration: PT4H0M0S
+      startTime: "05:00"
+  monitoringService: monitoring.googleapis.com/kubernetes
+  networkPolicy:
+    enabled: true
+    provider: CALICO
+  networkRef:
+    name: anthos-platform
+  nodeConfig:
+    diskSizeGb: 100
+    diskType: pd-standard
+    imageType: COS
+    labels:
+      cluster_name: ENV-REGION # {"$kpt-set":"env-region"}
+      node_pool: wi-pool-ENV-REGION # {"$kpt-set":"node-pool"}
+    machineType: n1-standard-2
+    metadata:
+      cluster_name: ENV-REGION # {"$kpt-set":"env-region"}
+      disable-legacy-endpoints: "true"
+      node_pool: wi-pool-ENV-REGION # {"$kpt-set":"node-pool"}
+    oauthScopes:
+    - https://www.googleapis.com/auth/cloud-platform
+    serviceAccountRef:
+      name: tf-sa-ENV-REGION # {"$kpt-set":"service-account"}
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+    tags:
+    - gke-ENV-REGION # {"$kpt-set":"gke-env-region"}
+    - gke-ENV-REGION-wi-pool # {"$kpt-set":"gke-env-region-wi-pool"}
+    workloadMetadataConfig:
+      nodeMetadata: GKE_METADATA_SERVER
+  podSecurityPolicyConfig:
+    enabled: false
+  subnetworkRef:
+    name: anthos-platform-east
+  verticalPodAutoscaling:
+    enabled: false
+  workloadIdentityConfig:
+    identityNamespace: YOUR_PROJECT.svc.id.goog # {"$kpt-set":"identity-namespace"}
+---
+apiVersion: container.cnrm.cloud.google.com/v1beta1
+kind: ContainerNodePool
+metadata:
+  name: wi-pool-ENV-REGION # {"$kpt-set":"node-pool"}
+  namespace: YOUR_NAMESPACE # {"$kpt-set":"namespace"}
+spec:
+  autoscaling:
+    maxNodeCount: 3
+    minNodeCount: 1
+  clusterRef:
+    name: ENV-REGION # {"$kpt-set":"env-region"}
+  initialNodeCount: 1
+  location: REGION # {"$kpt-set":"region"}
+  management:
+    autoRepair: true
+    autoUpgrade: true
+  maxPodsPerNode: 110
+  nodeConfig:
+    diskSizeGb: 100
+    diskType: pd-standard
+    imageType: COS
+    labels:
+      cluster_name: ENV-REGION # {"$kpt-set":"env-region"}
+      node_pool: wi-pool-ENV-REGION # {"$kpt-set":"node-pool"}
+    machineType: n1-standard-2
+    metadata:
+      cluster_name: ENV-REGION # {"$kpt-set":"env-region"}
+      disable-legacy-endpoints: "true"
+      node_pool: wi-pool-ENV-REGION # {"$kpt-set":"node-pool"}
+    oauthScopes:
+    - https://www.googleapis.com/auth/cloud-platform
+    serviceAccountRef:
+      name: tf-sa-ENV-REGION # {"$kpt-set":"service-account"}
+    shieldedInstanceConfig:
+      enableIntegrityMonitoring: true
+    tags:
+    - gke-ENV-REGION # {"$kpt-set":"gke-env-region"}
+    - gke-ENV-REGION-wi-pool # {"$kpt-set":"gke-env-region-wi-pool"}
+    workloadMetadataConfig:
+      nodeMetadata: GKE_METADATA_SERVER
+  upgradeSettings:
+    maxSurge: 1
+    maxUnavailable: 0
+---
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMServiceAccount
+metadata:
+  name: tf-sa-ENV-REGION # {"$kpt-set":"service-account"}
+  namespace: YOUR_NAMESPACE # {"$kpt-set":"namespace"}
+spec:
+  displayName: Cluster Service Account for ENV-REGION # {"$kpt-set":"description"}
