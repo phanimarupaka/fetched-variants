@@ -1,11 +1,11 @@
 apiVersion: kpt.dev/v1alpha1
 kind: Kptfile
 metadata:
-    name: cluster-dev
+    name: cluster-staging
 packageMetadata:
     shortDescription: sample description
 dependencies:
-  - name: .
+  - name: base
     git:
         repo: git@github.com:phanimarupaka/clusters-base
         directory: /

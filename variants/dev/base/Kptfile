@@ -8,7 +8,7 @@ upstream:
         commit: a56995f0221c481856faf3671c3124873f253684
         repo: git@github.com:phanimarupaka/clusters-base
         directory: /
-        ref: master
+        ref: v0.1.0
 packageMetadata:
     shortDescription: sample description
 openAPI:

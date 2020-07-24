@@ -1,11 +1,11 @@
 apiVersion: kpt.dev/v1alpha1
 kind: Kptfile
 metadata:
-    name: cluster-prod-central
+    name: cluster-dev
 packageMetadata:
     shortDescription: sample description
 dependencies:
-  - name: .
+  - name: base
     git:
         repo: git@github.com:phanimarupaka/clusters-base
         directory: /
